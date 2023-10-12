@@ -42,10 +42,14 @@
 	"dependencies": {
 		"async-exit-hook": "^2.0.1",
 		"commander": "^10.0.1",
-		"dotenv": "^16.0.3",
+		"dotenv": "^16.3.1",
+		"fetch-blob": "^4.0.0",
+		"formdata-polyfill": "^4.0.10",
 		"http-errors": "^2.0.0",
 		"ipaddr.js": "^2.0.1",
 		"lowdb": "^6.0.1",
+		"node-fetch": "^2.7.0",
+		"node-fetch-commonjs": "^3.3.2",
 		"source-map-support": "^0.5.21",
 		"ws": "^8.13.0"
 	},
