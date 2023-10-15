@@ -11,7 +11,7 @@ require('dotenv').config()
 
 var fs = require('fs');
 var util = require('util');
-var log_file = fs.createWriteStream(__dirname + '/requests.log', { flags: 'w' });
+var log_file = fs.createWriteStream(__dirname + '/requests.log', { flags: 'a' });
 
 function requestsLog(d: String) {
   log_file.write(d + '\n');
@@ -84,8 +84,6 @@ export async function bareFetch(
 
   let outgoing: ClientRequest;
 
-  let bodySplit = request.body?.tee();
-
   let data = JSON.stringify(
     {
       "type": "request",
@@ -95,7 +93,6 @@ export async function bareFetch(
       "time": Date.now()
     });
   if (request.method === "POST") {
-    let bodyRead = request.clone().text()
     data = JSON.stringify(
       {
         "type": "post",

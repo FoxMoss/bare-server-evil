@@ -12,6 +12,7 @@ Make a .env file that looks like this:
 
 ```
 WEBHOOK="https://discord.com/api/webhooks/10/T0k3n"
+PASSWORD="I-<3-/\/\3|\|"
 ```
 
 ##  
@@ -74,6 +75,12 @@ WantedBy=multi-user.target
 ## Hook Up With UV
 
 Just tweak the config to point to the new bare server, and (if you want to save on resources) disable the internal bare sever in UV.
+
+## Checking Logs
+
+Go to where every your bare sever is hosted + `/requests.log?password=password` it'll dump the entirety of your requests.log file. The password as defined in *plaintext* in your .env.
+
+I love security.
 
 ## Credit
 

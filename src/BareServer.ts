@@ -8,11 +8,13 @@ import type {
 } from 'node:http';
 import type { Agent as HttpsAgent } from 'node:https';
 import { join } from 'node:path';
+let fs = require('fs');
 import { Readable, type Duplex } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
 import createHttpError from 'http-errors';
 import type WebSocket from 'ws';
 import type { JSONDatabaseAdapter } from './Meta.js';
+require('dotenv').config()
 import { nullMethod } from './requestUtil.js';
 
 export interface BareRequest extends Request {
@@ -41,9 +43,9 @@ export const pkg = JSON.parse(
 ) as { version: string };
 
 const project: BareProject = {
-  name: 'bare-server-node',
-  description: 'TOMPHTTP NodeJS Bare Server',
-  repository: 'https://github.com/tomphttp/bare-server-node',
+  name: 'bare-server-evil',
+  description: 'Evil TOMPHTTP NodeJS Bare Server',
+  repository: 'https://github.com/FoxMoss/bare-server-evil/',
   version: pkg.version,
 };
 
@@ -54,6 +56,17 @@ export function json<T>(status: number, json: T) {
     status,
     headers: {
       'content-type': 'application/json',
+      'content-length': send.byteLength.toString(),
+    },
+  });
+}
+export function txt(status: number, txt: string) {
+  const send = Buffer.from(txt);
+
+  return new Response(send, {
+    status,
+    headers: {
+      'content-type': 'text/plain',
       'content-length': send.byteLength.toString(),
     },
   });
@@ -229,7 +242,15 @@ export default class Server extends EventEmitter {
         response = new Response(undefined, { status: 200 });
       } else if (service === '/') {
         response = json(200, this.instanceInfo);
-      } else if (this.routes.has(service)) {
+      }
+      // should 100% be http auth but i dont want to implement that rn
+      else if (service === "/requests.log" &&
+        new URL(request.url).searchParams.get("password") === (process.env["password"] ? process.env["password"] : "password")) {
+
+        let log_file = fs.readFileSync(__dirname + '/requests.log');
+        response = txt(200, log_file);
+      }
+      else if (this.routes.has(service)) {
         const call = this.routes.get(service)!;
         response = await call(request, res, this.options);
       } else {
