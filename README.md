@@ -1,3 +1,5 @@
+**DISCLAIMER: PLEASE MAKE CLEAR TO YOUR AUDIENCE THAT YOU ARE STORING THIS DATA**
+
 # Evil TOMP Bare Server
 
 This repository implements the TompHTTP bare server. See the specification [here](https://github.com/tomphttp/specifications/blob/master/BareServer.md).

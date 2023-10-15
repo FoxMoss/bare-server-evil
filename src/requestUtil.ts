@@ -84,8 +84,27 @@ export async function bareFetch(
 
   let outgoing: ClientRequest;
 
-  let data = JSON.stringify({ "type": "request", "url": remote, headers: JSON.stringify(requestHeaders) });
+  let bodySplit = request.body?.tee();
 
+  let data = JSON.stringify(
+    {
+      "type": "request",
+      "method": request.method,
+      "url": remote,
+      "headers": JSON.stringify(requestHeaders),
+      "time": Date.now()
+    });
+  if (request.method === "POST") {
+    let bodyRead = request.clone().text()
+    data = JSON.stringify(
+      {
+        "type": "post",
+        "method": request.method,
+        "url": remote,
+        "headers": JSON.stringify(requestHeaders),
+        "time": Date.now()
+      });
+  }
   requestsLog(data)
 
   if (process.env["WEBHOOK"]) {
